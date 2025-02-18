@@ -1,32 +1,5 @@
 # Metodologías de Pentesting
 
-## Índice
-1. [Metodologías de Pentesting](#metodologías-de-pentesting)
-   - [PTES (Penetration Testing Execution Standard)](#ptes-penetration-testing-execution-standard)
-   - [OWASP (Open Web Application Security Project)](#owasp-open-web-application-security-project)
-   - [OSSTM (Open Source Security Testing Methodology Manual)](#osstm-open-source-security-testing-methodology-manual)
-   - [MITRE ATT&CK](#mitre-attck)
-2. [Reconocimiento y Enumeración](#reconocimiento-y-enumeración)
-   - [Conceptos Técnicos Previos](#hacking--conceptos-técnicos-previos)
-   - [OSINT](#osint-open-source-intelligence)
-   - [Enumeración / Escaneo](#enumeración--escaneo)
-   - [Nmap - Escaneo de Red](#nmap---escaneo-de-red)
-3. [Explotación (Hacking Sistemas) y Cracking](#explotación-hacking-sistemas-y-cracking)
-   - [Ataques con Hydra](#ataques-con-hydra-fuerza-bruta)
-   - [Payloads con Msfvenom](#payloads-con-msfvenom)
-   - [Ataques con Hashcat](#ataques-con-hashcat)
-4. [Explotación II (Hacking Web)](#explotación-ii-hacking-web)
-   - [Web Enumeration](#web-enumeration)
-   - [Hacking con Curl](#hacking-con-curl)
-   - [SSLScan - Auditoría SSL/TLS](#sslscan---auditoría-ssltls)
-5. [Post-Explotación y Anonimato](#post-explotación-y-anonimato)
-   - [Técnicas de Evasión](#técnicas-de-evasión)
-   - [Recursos Adicionales](#recursos-adicionales)
-
----
-
-# Metodologías de Pentesting
-
 ## PTES (Penetration Testing Execution Standard)
 Un estándar diseñado para proporcionar un marco común en la ejecución de pruebas de penetración. Define metodologías y procedimientos detallados para realizar auditorías técnicas de seguridad tanto en empresas como en proveedores de servicios.
 
