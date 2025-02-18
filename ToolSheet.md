@@ -114,6 +114,21 @@ sslscan <dominio>  # Escaneo general
 sslscan --no-failed --port 443 <dominio>  # Solo resultados exitosos
 ```
 
+## Command Injection
+
+## File Upload
+
+##  XSS (Reflected & Stored & Cookie Hijacking)
+
+## CSRF
+
+## LFI
+
+## RFI & RFI to Reverse Shell
+
+## SQL Injection
+
+
 ---
 
 # POST-EXPLOTACIÓN Y ANONIMATO
