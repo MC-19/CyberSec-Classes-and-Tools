@@ -39,7 +39,8 @@ Técnicas y herramientas utilizadas para obtener información pública de un obj
 - **[Maltego](https://www.maltego.com/)**: Plataforma de análisis de relaciones y visualización de datos para OSINT.
 - **[The Harvester](https://www.osintux.org/documentacion/the-harvester)**: Herramienta para recopilar correos electrónicos, subdominios e información de servidores mediante OSINT.
 - **[Censys](https://search.censys.io/)**: Motor de búsqueda de activos en internet similar a Shodan.
-
+- **[Wawf00]([url](https://github.com/EnableSecurity/wafw00f))**: Herramienta para la detección de firewalls de aplicaciones web (WAF).
+- **[Sublist3r]([url](https://github.com/aboul3la/Sublist3r))**: Herramienta para enumerar subdominios de un dominio objetivo utilizando OSINT.
 ## Enumeración / Escaneo
 
 - **Ping**: Comprobación de disponibilidad de un host en la red.
