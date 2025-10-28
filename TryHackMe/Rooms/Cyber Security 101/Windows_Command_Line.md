@@ -49,7 +49,7 @@ driverquery | more
 | `help` | Muestra ayuda sobre un comando específico |
 | `cls` | Limpia la pantalla de la terminal |
 
----
+------------------------------------------------------------------------------
 
 # Network Troubleshooting
 
@@ -141,6 +141,171 @@ Esto permite ver:
 - Los puertos que están escuchando (ej. `22` para SSH)
 - Los **PIDs** de cada conexión
 
+---------------------------------------------------------------------------
+
+# Windows File and Disk Management - Cybersecurity 101
+
+## 📁 Trabajando con directorios
+
+### Ver el directorio actual
+```cmd
+cd
+```
+Muestra la **unidad y carpeta actual** (equivalente a “¿Dónde estoy?”).
+
+### Ver el contenido del directorio
+```cmd
+dir
+```
+Muestra los archivos y subcarpetas del directorio actual.
+
+#### Opciones útiles
+| Opción | Descripción |
+|---------|-------------|
+| `/a` | Muestra archivos ocultos y de sistema |
+| `/s` | Muestra archivos del directorio actual y subdirectorios |
+
+### Ver estructura visual de carpetas
+```cmd
+tree
+```
+Muestra un árbol con las carpetas y subcarpetas.
+
+### Cambiar de directorio
+```cmd
+cd nombre_carpeta
+```
+Equivalente a hacer doble clic sobre una carpeta.  
+Para subir un nivel:
+```cmd
+cd ..
+```
+
+### Crear y eliminar directorios
+```cmd
+mkdir nombre_carpeta   # Crea una carpeta
+rmdir nombre_carpeta   # Elimina una carpeta
+```
+
 ---
+
+## 📄 Trabajando con archivos
+
+### Ver contenido de archivos de texto
+```cmd
+type archivo.txt
+```
+Muestra el contenido completo del archivo.  
+Para archivos largos:
+```cmd
+more archivo.txt
+```
+- **Espacio** → Avanza una página  
+- **Enter** → Avanza una línea
+
+### Copiar archivos
+```cmd
+copy origen destino
+```
+Ejemplo:
+```cmd
+copy test.txt test2.txt
+```
+
+### Mover archivos
+```cmd
+move archivo destino
+```
+Ejemplo:
+```cmd
+move test2.txt ..
+```
+(Mueve el archivo un nivel arriba en el árbol de carpetas)
+
+### Eliminar archivos
+```cmd
+del archivo.txt
+```
+o
+```cmd
+erase archivo.txt
+```
+
+### Usar comodines (wildcards)
+```cmd
+copy *.md C:\Markdown
+```
+Copia **todos los archivos .md** al directorio especificado.
+
+----------------------------------------------------------------------------
+
+# Windows Task and Process Management
+
+## ⚙️ Gestión de tareas y procesos
+
+En Windows, además del **Administrador de tareas (Task Manager)**, puedes controlar los procesos desde la **línea de comandos**.
+
+---
+
+## 📋 Ver procesos activos
+
+### Listar todos los procesos
+```cmd
+tasklist
+```
+Muestra una tabla con:
+- **Image Name** → nombre del proceso (ej. `svchost.exe`)
+- **PID** → identificador del proceso
+- **Mem Usage** → memoria utilizada
+
+Ejemplo de salida:
+```
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+System Idle Process              0 Services                   0          8 K
+System                           4 Services                   0         88 K
+...
+```
+---
+
+## 🔍 Filtrar procesos específicos
+
+Puedes filtrar resultados para mostrar solo los procesos que coincidan con un criterio.
+
+### Sintaxis:
+```cmd
+tasklist /FI "imagename eq nombre_proceso.exe"
+```
+Ejemplo:
+```cmd
+tasklist /FI "imagename eq sshd.exe"
+```
+Salida:
+```
+Image Name                     PID Session Name        Session#    Mem Usage
+========================= ======== ================ =========== ============
+sshd.exe                      2116 Services                   0      6,992 K
+sshd.exe                      2712 Services                   0      7,668 K
+sshd.exe                      4752 Services                   0      7,372 K
+```
+
+📘 *El parámetro `/FI` significa “Filter Input” (filtro de entrada).*
+
+---
+
+## ❌ Finalizar procesos
+
+Una vez identificado el proceso (por su **PID**), puedes detenerlo con:
+
+```cmd
+taskkill /PID <id_proceso>
+```
+Ejemplo:
+```cmd
+taskkill /PID 4567
+```
+Esto **termina el proceso con PID 4567**.
+
+----------------------------------------------------------------------------
 
 
