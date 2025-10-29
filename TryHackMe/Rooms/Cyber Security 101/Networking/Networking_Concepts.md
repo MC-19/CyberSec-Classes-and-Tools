@@ -475,13 +475,114 @@ Supongamos que realizas una búsqueda en TryHackMe.
 7. 🖥️ **Servidor destino:**  
    El router del destino entrega el paquete al servidor, que realiza el proceso inverso (**desencapsulación**) hasta que la aplicación recibe los datos originales.
 
+------------------------------------------------------------------------------------------------------------------------------------------------
+
+# Resumen: TELNET — Uso y ejemplos prácticos
+
+## ¿Qué es Telnet?
+**Telnet** (Teletype Network) es un protocolo que permite conectarse de forma remota a un servicio que escucha en un **puerto TCP**. Tradicionalmente se usó para acceso remoto (terminales), pero también sirve para interactuar manualmente con cualquier servicio TCP (por ejemplo, servidores HTTP, echo, daytime, etc.).
+
+> ⚠️ Telnet transmite datos en texto claro (sin cifrado). No se recomienda para administración remota en entornos no controlados; usa **SSH** para acceso seguro. Aquí se usa con fines educativos.
+
 ---
 
-## 🧠 Conclusión
+## Preparación (TryHackMe / entorno de laboratorio)
+- Pulsa **Start Machine** para iniciar la máquina objetivo.
+- Inicia el **AttackBox** con **Start AttackBox** (usa Split-Screen si está disponible).
+- Espera ~2 minutos a que ambas máquinas arranquen correctamente.
+- Abre la terminal en el **AttackBox** para ejecutar `telnet`.
 
-- Cada capa **añade información (encapsula)** antes de transmitir los datos.  
-- En el destino, las capas **eliminan la información (desencapsulan)** para recuperar el mensaje original.  
-- Este proceso garantiza que la comunicación sea **modular, confiable y estructurada**.
+---
 
-📦 En resumen:
-> Los datos viajan encapsulados dentro de varias capas (Aplicación → Transporte → Red → Enlace) y se desencapsulan en el orden inverso al llegar a su destino.
+## Conexión básica con Telnet
+Sintaxis:
+```bash
+telnet <IP> <PUERTO>
+```
+Ejemplo:
+```bash
+telnet MACHINE_IP 7
+```
+- `MACHINE_IP`: dirección IP del objetivo.
+- `7`: puerto del servicio (ej. echo).
+
+Para cerrar la conexión desde el cliente Telnet:
+1. Pulsa `Ctrl + ]` (escape).
+2. En el prompt de Telnet escribe:
+```
+quit
+```
+
+---
+
+## Servicios de ejemplo en la máquina objetivo
+
+### 1) Echo server (puerto 7)
+- Comportamiento: reenvía (echo) todo lo que le envíes.
+- Ejemplo de interacción:
+```
+telnet MACHINE_IP 7
+Trying MACHINE_IP...
+Connected to MACHINE_IP.
+Escape character is '^]'.
+Hi
+Hi
+How are you?
+How are you?
+Bye
+Bye
+^]
+telnet> quit
+Connection closed.
+```
+
+### 2) Daytime server (puerto 13)
+- Comportamiento: responde con la fecha y hora actual y cierra la conexión.
+- Ejemplo:
+```
+telnet MACHINE_IP 13
+Trying MACHINE_IP...
+Connected to MACHINE_IP.
+Escape character is '^]'.
+Thu Jun 20 12:36:32 PM UTC 2024
+Connection closed by foreign host.
+```
+
+### 3) Web (HTTP) server (puerto 80)
+- Puedes solicitar páginas HTTP manualmente enviando una petición `GET`.
+- Pasos:
+  1. Conéctate: `telnet MACHINE_IP 80`
+  2. Escribe la petición HTTP y la cabecera `Host`, luego deja una línea en blanco (Enter doble).
+- Ejemplo:
+```
+telnet MACHINE_IP 80
+Trying MACHINE_IP...
+Connected to MACHINE_IP.
+Escape character is '^]'.
+GET / HTTP/1.1
+Host: telnet.thm
+
+HTTP/1.1 200 OK
+Content-Type: text/html
+[...]
+Connection closed by foreign host.
+```
+> Nota: Si no hay respuesta tras escribir, pulsa Enter otra vez para asegurar la línea en blanco final.
+
+---
+
+## Atajos y consejos útiles
+- `Ctrl + ]` → entrar al prompt de Telnet (escape).
+- `quit` → cerrar sesión de Telnet desde el prompt.
+- Telnet es útil para **diagnóstico** y comprobar servicios TCP simples (puertos abiertos, respuesta básica).
+- Para pruebas seguras (shell remota), usa **SSH** en lugar de Telnet.
+
+---
+
+## Resumen rápido
+- Telnet conecta a cualquier servicio TCP: `telnet IP PUERTO`.
+- Puertos de ejemplo: **7** (echo), **13** (daytime), **80** (HTTP).
+- Para HTTP, envía manualmente la petición `GET` y la cabecera `Host:` seguida de una línea en blanco.
+- Cierra conexiones con `Ctrl + ]` → `quit`.
+
+------------------------------------------------------------------------------------------------------------------------------------------------
