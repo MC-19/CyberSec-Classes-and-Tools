@@ -1,129 +1,129 @@
-# Nmap — Host Discovery (The Basics)
+# Nmap — Descubrimiento de Hosts (Lo Básico)
 
-**Goal:** find which hosts are _online_ (responding) on a network using Nmap.
+**Objetivo:** encontrar qué hosts están _en línea_ (respondiendo) en una red utilizando Nmap.
 
 ---
 
-## Quick summary / cheat‑sheet
+## Resumen rápido / hoja de referencia
 
-- `nmap -sn <target>`  
-  Ping‑scan / host discovery only (no port/service scan). Formerly `-sP`.
-- `nmap -sL <target>`  
-  List targets only (no probes). Good to verify target expansion.
-- Run **as root** (or with `sudo`) for best discovery results — Nmap can use ARP, raw packets and privileged probes.
-- Common discovery probes:
-  - ARP (used automatically on directly connected Ethernet/Wi‑LAN — fastest & most reliable for local subnets)
+- `nmap -sn <objetivo>`  
+  Escaneo de ping / solo descubrimiento de hosts (sin escaneo de puertos o servicios). Antes era `-sP`.
+- `nmap -sL <objetivo>`  
+  Solo lista los objetivos (sin enviar paquetes). Útil para verificar la expansión de objetivos.
+- Ejecutar **como root** (o con `sudo`) para obtener mejores resultados — Nmap puede usar ARP, paquetes en bruto y sondas privilegiadas.
+- Sondeos comunes de descubrimiento:
+  - ARP (usado automáticamente en redes Ethernet/Wi‑Fi locales — el más rápido y confiable para subredes locales)
   - ICMP echo (ping)
-  - TCP SYN to common ports (e.g. 80, 443)
-  - TCP ACK to common ports
-  - UDP to common ports
-- Control probe types explicitly:
-  - `-PS[ports]` TCP SYN discovery (e.g. `-PS80,443`)
-  - `-PA[ports]` TCP ACK discovery
-  - `-PU[ports]` UDP discovery
-  - `-PP` ICMP timestamp, `-PE` ICMP echo (can mix and match)
+  - TCP SYN a puertos comunes (por ejemplo, 80, 443)
+  - TCP ACK a puertos comunes
+  - UDP a puertos comunes
+- Controlar los tipos de sondeo explícitamente:
+  - `-PS[puertos]` descubrimiento TCP SYN (ejemplo: `-PS80,443`)
+  - `-PA[puertos]` descubrimiento TCP ACK
+  - `-PU[puertos]` descubrimiento UDP
+  - `-PP` ICMP timestamp, `-PE` ICMP echo (pueden combinarse)
 
 ---
 
-## Target specification examples
+## Ejemplos de especificación de objetivos
 
-- Single IP: `nmap -sn 10.0.0.5`
-- Range: `nmap -sn 192.168.1.1-50`
+- IP única: `nmap -sn 10.0.0.5`
+- Rango: `nmap -sn 192.168.1.1-50`
 - CIDR: `nmap -sn 192.168.1.0/24`
-- Hostname: `nmap -sn example.local`
+- Nombre de host: `nmap -sn ejemplo.local`
 
 ---
 
-## Local vs Remote scanning behaviour
+## Comportamiento según tipo de red
 
-### Scanning a **local** directly‑connected subnet
-- Nmap will prefer **ARP** probes on Ethernet/Wi‑Fi.  
-  ARP requests are answered by devices on the same L2 segment even if IP stack is partially down → very reliable.
-- Example:
+### Escaneando una **subred local** (directamente conectada)
+- Nmap preferirá usar **ARP**.  
+  Las peticiones ARP son respondidas por los dispositivos en el mismo segmento de red (nivel 2), incluso si la pila IP está parcialmente caída → muy confiable.
+- Ejemplo:
 ```bash
 sudo nmap -sn 192.168.66.0/24
 ```
-Output includes MAC addresses (because ARP is used).
+La salida incluye direcciones MAC (porque se usa ARP).
 
-### Scanning a **remote** subnet (one or more routers away)
-- ARP can't be used, so Nmap uses other probes (ICMP, TCP/UDP).
-- Some hosts or routers may drop ICMP or certain TCP probes. Nmap will try multiple probe types unless you constrain it.
-- Example:
+### Escaneando una **subred remota** (a través de uno o más routers)
+- ARP no puede usarse, por lo que Nmap empleará otros sondeos (ICMP, TCP/UDP).
+- Algunos hosts o routers pueden bloquear ICMP o ciertos sondeos TCP. Nmap probará varios tipos de sondeo a menos que los restrinjas explícitamente.
+- Ejemplo:
 ```bash
 sudo nmap -sn 192.168.11.0/24
 ```
 
 ---
 
-## Typical Nmap output explained (excerpt)
+## Salida típica de Nmap explicada (ejemplo)
+
 ```
 Nmap scan report for MyRouter (192.168.66.1)
 Host is up (0.0069s latency).
 MAC Address: 44:DF:65:D8:FE:6C (Vendor)
 ```
-- `Host is up` → host responded to one of the discovery probes.
-- `MAC Address` present only when scanning L2-local network (ARP responses).
+
+- `Host is up` → el host respondió a uno de los sondeos de descubrimiento.
+- `MAC Address` aparece solo cuando se escanea una red L2-local (respuestas ARP).
 
 ---
 
-## Useful tips & gotchas
+## Consejos útiles y advertencias
 
-- Use `-n` to skip DNS resolution and speed up output when scanning many hosts.
-- `-Pn` disables host discovery (assume hosts up) — useful when discovery is blocked but you still want to attempt scans.
-- `-v` or `-vv` increases verbosity to help debug what probe types Nmap used.
-- Firewalls often block ICMP and some TCP probes → try different probe types (`-PS`, `-PA`, `-PU`) or scan specific ports you expect open.
-- Use `--reason` to see why Nmap decided a host is up (which packet/response triggered it).
-- Use packet capture (Wireshark/tcpdump) while running a scan to learn which probes and responses are happening:
-  - Local subnet: look for ARP requests/replies.
-  - Remote subnet: look for ICMP echo/replies, TCP SYN/ACK or RST, ICMP unreachable messages.
+- Usa `-n` para omitir la resolución DNS y acelerar la salida cuando escanees muchos hosts.
+- `-Pn` desactiva el descubrimiento de hosts (asume que los hosts están arriba) — útil cuando el descubrimiento está bloqueado pero quieres intentar un escaneo de puertos.
+- `-v` o `-vv` aumenta la verbosidad para ayudar a depurar qué tipos de sondeo usó Nmap.
+- Los firewalls suelen bloquear ICMP y algunos sondeos TCP → prueba distintos tipos de sondeo (`-PS`, `-PA`, `-PU`) o escanea puertos específicos que esperes que estén abiertos.
+- Usa `--reason` para ver por qué Nmap decidió que un host está arriba (qué paquete/respuesta lo desencadenó).
+- Usa captura de paquetes (Wireshark/tcpdump) mientras ejecutas un escaneo para aprender qué sondeos y respuestas ocurren:
+  - Subred local: busca solicitudes/respuestas ARP.
+  - Subred remota: busca ICMP echo/reply, TCP SYN/ACK o RST, mensajes ICMP unreachable.
 
 ---
 
-## Quick examples
+## Ejemplos rápidos
 
-Discover live hosts in /24 (local):
+Descubrir hosts activos en /24 (local):
 ```bash
 sudo nmap -sn -n 192.168.1.0/24
 ```
 
-List targets only:
+Listar objetivos solamente:
 ```bash
 nmap -sL 10.0.0.0/24
 ```
 
-SYN probe discovery to ports 80 and 443 only:
+Sondeo SYN a puertos 80 y 443 solamente:
 ```bash
 sudo nmap -sn -PS80,443 192.168.11.0/24
 ```
 
-Show why each host is considered up:
+Mostrar por qué cada host se considera "up":
 ```bash
 sudo nmap -sn --reason 192.168.11.0/24
 ```
 
-Assume hosts are up (skip discovery) and directly scan ports:
+Asumir hosts arriba (saltar descubrimiento) y escanear puertos directamente:
 ```bash
 sudo nmap -Pn 192.168.11.5
 ```
 
 ---
 
-## Short walkthrough: interpret a noisy result
-If `nmap -sn` reports `Host is up` but your traceroute/tcpdump shows ICMP unreachable from an intermediate router:
-- Nmap may have used TCP probes that elicited responses from an intermediate device, or the router generated ICMP responses which Nmap interpreted.
-- Use `--reason` and `-vv` + packet capture to confirm true endpoint responses vs intermediate devices.
+## Breve guía para interpretar resultados ruidosos
+
+Si `nmap -sn` informa `Host is up` pero tu traceroute/tcpdump muestra ICMP unreachable desde un router intermedio:
+- Nmap puede haber usado sondeos TCP que elicitaron respuestas de un dispositivo intermedio, o el router generó respuestas ICMP que Nmap interpretó.
+- Usa `--reason` y `-vv` junto con captura de paquetes para confirmar respuestas reales del endpoint frente a respuestas de dispositivos intermedios.
 
 ---
 
-## Further reading
-- `man nmap` → full options
-- Nmap book / official docs: https://nmap.org/book/  
-- pcap analysis with `tcpdump` / `wireshark` to observe actual probe traffic.
+## Lecturas adicionales
+- `man nmap` → opciones completas
+- Nmap book / documentación oficial: https://nmap.org/book/  
+- Análisis pcap con `tcpdump` / `wireshark` para observar el tráfico real de sondeos.
 
 ---
-
-*Generated: concise Nmap host discovery guide (markdown) — ready for study or inclusion in notes.*
-
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
